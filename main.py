@@ -3,16 +3,6 @@ import pinecone
 import openai
 import docx2txt
 
-# Load the SentenceTransformer model
-model = SentenceTransformer('all-MiniLM-L6-v2')
-
-text = docx2txt.process('DataLaw.docx')
-
-# Initialize Pinecone vector database
-pinecone.init(api_key="", environment="")
-index_name = "my_index"
-index = pinecone.Index(index_name)
-
 
 # Split text into smaller parts to be indexed separately
 def split_text_into_chunks(plain_text, max_chars=2000):
@@ -88,6 +78,17 @@ def user_query(query, k=5):
     return dict(zip(matching_contexts, answers))
 
 
-text_chunks = split_text_into_chunks(text)
-addData(text_chunks)
-user_query("How can I do this?")
+if __name__ == "__main__":
+    # Load the SentenceTransformer model
+    model = SentenceTransformer('all-MiniLM-L6-v2')
+
+    text = docx2txt.process('DataLaw.docx')
+
+    # Initialize Pinecone vector database
+    pinecone.init(api_key="", environment="")
+    index_name = "my_index"
+    index = pinecone.Index(index_name)
+
+    text_chunks = split_text_into_chunks(text)
+    addData(text_chunks)
+    user_query("How can I do this?")
