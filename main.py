@@ -47,7 +47,7 @@ def create_prompt(context, query):
 def generate_answer(prompt):
     # Set up OpenAI API credentials
     openai.api_key = "Insert openai API here"
-    model_engine = "text-davinci-002"  # Replace with your preferred GPT-3 model
+    model_engine = "text-embedding-002"
 
     # Generate answer using OpenAI's GPT-3 API
     response = openai.Completion.create(
