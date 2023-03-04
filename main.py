@@ -32,9 +32,9 @@ def addData(corpusData):
 
 # Query Pinecone index and return matching contexts
 def find_match(query, k):
-    query_em = model.encode(query).tolist()
-    result = index.query(query_em, top_k=k, includeMetadata=True)
-    return [result['matches'][i]['metadata']['context'] for i in range(k)]
+    query_vecs = embed_text([query], model='text-davinci-002')
+    result = index.query(query_vecs[0], top_k=k, include_metadata=True)
+    return [r.metadata['context'] for r in result]
 
 
 # Generate a prompt based on the retrieved context and query
@@ -79,8 +79,9 @@ def user_query(query, k=5):
 
 
 if __name__ == "__main__":
-    # Load the SentenceTransformer model
-    model = SentenceTransformer('all-MiniLM-L6-v2')
+    # Load the OpenAI text-embedding-ada-002 model
+    openai.api_key = "Insert openai API here"
+    model = openai.api.Completion.create(engine="text-embedding-ada-002").model
 
     text = docx2txt.process('DataLaw.docx')
 
